@@ -27,7 +27,7 @@ class Route
       route_params[param] = match_data[param]
     end
     controller = @controller_class.new(req, res, route_params)
-    controller.invoke_action(method)
+    controller.invoke_action(@action_name)
 
   end
 end
@@ -68,7 +68,7 @@ class Router
   def run(req, res)
     route = match(req)
     if route
-      route.run
+      route.run(req, res)
     else
       res.status = 404
       res.write('Not found')

@@ -7,7 +7,7 @@ class ControllerBase
   attr_reader :req, :res, :params
 
   # Setup the controller
-  def initialize(req, res, params)
+  def initialize(req, res, params = {})
     @req = req
     @res = res
     @params = params
@@ -24,7 +24,7 @@ class ControllerBase
     @res['location']=(url)
     @res.status = 302
     @already_built_response = true
-    @session.store_session(@res)
+    session.store_session(@res)
   end
 
   # Populate the response with content.
@@ -35,7 +35,7 @@ class ControllerBase
     @res['Content-Type'] = content_type
     @res.write(content)
     @already_built_response = true
-    @session.store_session(@res)
+    session.store_session(@res)
   end
 
   # use ERB and binding to evaluate templates
