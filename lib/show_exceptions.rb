@@ -1,5 +1,4 @@
 require 'erb'
-require 'byebug'
 require 'rack'
 class ShowExceptions
   attr_reader :app
@@ -12,8 +11,6 @@ class ShowExceptions
       app.call(env)
     rescue => e
       render_exception(e)
-      # env.status = 500
-      # env['Content-Type'] = 'text'
     end
   end
 
