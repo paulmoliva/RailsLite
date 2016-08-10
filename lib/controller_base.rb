@@ -49,7 +49,6 @@ class ControllerBase
     template_content = File.read(loc + template_name.to_s + '.html.erb')
     template_content = ERB.new(template_content)
     render_content(template_content.result(binding), 'text/html')
-
   end
 
   # method exposing a `Session` object
@@ -60,6 +59,28 @@ class ControllerBase
   # use this with the router to call action_name (:index, :show, :create...)
   def invoke_action(name)
     send(name)
+    check_authenticity_token if req.request_method != 'GET' && @@authenticate
     render(name) unless already_built_response?
+  end
+
+  def form_authenticity_token
+    cookie = req.cookies["authenticity_token"]
+    if cookie
+      @token = JSON.parse(cookie)
+    else
+      @token ||= {token: SecureRandom.urlsafe_base64(8)}
+      res.set_cookie("authenticity_token", JSON.generate(@token))
+    end
+    JSON.generate(@token)
+  end
+
+  def check_authenticity_token
+    raise 'Invalid authenticity token' unless self.params["authenticity_token"]
+    cookie = req.env['HTTP_COOKIE'].split('=').last
+    raise 'Invalid authenticity token' unless self.params["authenticity_token"] == cookie
+  end
+
+  def self.protect_from_forgery
+    @@authenticate = true
   end
 end
