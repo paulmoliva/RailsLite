@@ -1,0 +1,21 @@
+<h1><%=e.message%></h1>
+
+<p>
+
+  <%=e.backtrace.to_s%>
+</p>
+
+
+
+<% lineno = line_number.to_s[1..-1].to_i %>
+
+<% File.readlines(file_name.to_s)[lineno-4..lineno+4].each_with_index do |line, i| %>
+  <% if i == 3 %>
+    <pre style="background-color:yellow;"><%= lineno + i - 3 %>) <%= line %></pre>
+  <% else %>
+    <pre><%= lineno + i - 3 %>) <%= line %></pre>
+  <% end %>
+
+<% end %>
+
+<img src = "https://media.giphy.com/media/ToEPIf9eDupWg/giphy.gif" />
