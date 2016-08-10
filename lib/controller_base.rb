@@ -2,6 +2,7 @@ require 'active_support'
 require 'active_support/core_ext'
 require 'erb'
 require_relative './session'
+Dir["/ActiveRecordLite/*.rb"].each {|file| require file }
 require 'byebug'
 class ControllerBase
   attr_reader :req, :res, :params
